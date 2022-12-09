@@ -26,7 +26,7 @@
                 <img src="@Model.Image.OriginalUrl" style="width:175px;height:250px;"/>
             </td>
             <td>
-                @Html.DisplayFor(Model => Model.Name)
+                @Html.DisplayFor(x => x.Name)
             </td>
             <td>
                 @foreach (var character in Model.CharacterCredits)

@@ -1,0 +1,61 @@
+﻿@model ComicVineApi.Models.IssueDetailed
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <table class="table-condensed table-bordered table-hover" style="table-layout:fixed;width:100%;">
+        <tr style="background-color:forestgreen">
+            <th>Image</th>
+
+            <th>Name</th>
+
+            <th>Characters</th>
+
+            <th>Locations</th>
+
+            <th>Teams</th>
+
+            <th>Concepts</th>
+        </tr>
+        <tr style="background-color: yellowgreen">
+            <td>
+                <img src="@Model.Image.OriginalUrl" style="width:175px;height:250px;"/>
+            </td>
+            <td>
+                @Html.DisplayFor(Model => Model.Name)
+            </td>
+            <td>
+                @foreach (var character in Model.CharacterCredits)
+                {
+                    <li>@Html.DisplayFor(charactermodel => character.Name)</li>
+                }
+            </td>
+            <td>
+                @foreach (var location in Model.LocationCredits)
+                {
+                    <li>@Html.DisplayFor(locationmodel => location.Name)</li>
+                }
+            </td>
+            <td>
+                @foreach (var team in Model.TeamCredits)
+                {
+                    <li>@Html.DisplayFor(teammodel => team.Name)</li>
+                }
+            </td>
+            <td>
+                @foreach (var concept in Model.ConceptCredits)
+                {
+                    <li>@Html.DisplayFor(conceptmodel => concept.Name)</li>
+                }
+            </td>
+        </tr>
+
+    </table>
+</div>
+<p>
+    <label>@Html.ActionLink("Back to List", "Index")</label>
+</p>

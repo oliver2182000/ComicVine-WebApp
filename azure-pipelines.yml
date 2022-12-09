@@ -1,0 +1,50 @@
+
+trigger:
+  - master
+
+variables:
+  VERBOSITY: normal
+  DOTNET_CORE_VERSION: 3.0.x
+
+strategy:
+  matrix:
+    macos:
+      IMAGE_NAME: Hosted macOS
+      MONO_VERSION: 6_4_0
+    windows:
+      IMAGE_NAME: Hosted Windows 2019 with VS2019
+    linux:
+      IMAGE_NAME: Hosted Ubuntu 1604
+
+pool:
+  name: $(IMAGE_NAME)
+
+steps:
+  - bash: sudo $AGENT_HOMEDIRECTORY/scripts/select-xamarin-sdk.sh $(MONO_VERSION)
+    displayName: Switch to the latest Xamarin SDK
+    condition: eq(variables['System.JobName'], 'macos')
+
+  - task: UseDotNet@2
+    displayName: Use the correct version of the .NET Core SDK
+    inputs:
+      version: $(DOTNET_CORE_VERSION)
+
+  - powershell: dotnet pack -v $(VERBOSITY) -c Release -o output
+    displayName: Run build
+
+  - powershell: dotnet test ComicVineApi.Tests/ComicVineApi.Tests.csproj -v $(VERBOSITY) -c Release -r output -l trx
+    displayName: Run tests
+
+  - task: PublishBuildArtifacts@1
+    displayName: Publish artifacts
+    inputs:
+      pathToPublish: output
+      artifactName: output-$(System.JobName)
+
+  - task: PublishTestResults@2
+    condition: always()
+    displayName: Publish test results
+    inputs:
+      testRunTitle: Test results for $(System.JobName)
+      testResultsFormat: VSTest
+      testResultsFiles: output/*.trx

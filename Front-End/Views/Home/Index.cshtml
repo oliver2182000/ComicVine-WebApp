@@ -1,0 +1,48 @@
+﻿@model IEnumerable<ComicVineApi.Models.Issue>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Comic List</h2>
+
+<table class="table-condensed table-bordered table-hover" style="table-layout:fixed;width:100%;">
+    <tr style="background-color:forestgreen">
+        <th>
+            @Html.DisplayNameFor(model => model.Image)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            <label>Issue</label>
+        </th>
+        <th>
+            <label>Date Added</label>
+        </th>
+        <th>
+            <label>More Info</label>
+        </th>
+    </tr>
+
+@foreach (var item in Model) {
+<tr style="background-color: yellowgreen">
+    <td>
+        <img src="@item.Image.OriginalUrl" style="width:200px;height:300px;" />
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Name)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.IssueNumber)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.DateAdded)
+    </td>
+    <td>
+        <label>@Html.ActionLink("Details", "Details", new { id = item.Id })</label>
+    </td>
+</tr>
+}
+
+</table>
